@@ -1,29 +1,32 @@
-# ChinaWeatherVisualization
 # 全国主要城市天气可视化
-This article introduces how to use the visualization package REmap to realize the weather visualization of major cities in China.
 REmap是ECharts中交互地图可视化功能的R接口，通过它可以直接使用R代码（而不必写JS代码）来实现交互地图可视化。本文将介绍如何使用REmap包实现全国主要城市天气可视化。
 ## 1 准备工作
 ### 1.1 安装R和RStudio
 见R基础部分
 ### 1.2 安装REmap
+``` r
 library(devtools)
 install_github('lchiffon/REmap')
+```
 请注意，以上命令默认你已经安装了devtools，如果你没有安装devtools，那么请先安装之。
 ### 1.3 准备三张天气图片
 图片可以自行百度或者设计，或者直接引用我github上的图片。
-图片链接地址https://github.com/wcc3358/ChinaWeatherVisualization，图片形式大致如下：
+图片链接地址https://github.com/wcc3358/ChinaWeatherVisualization
+图片形式大致如下：
  
 将天气数据做简化，简化后只有晴天、多云以及阴天三种。
 ## 2 载入REmap包
+``` r
 library(rvest) #用来爬取数据
 library(REmap) #实现地图可视化
 options(remap.js.web=T)
+```
 设置options(remap.js.web=T)后，生成html将保存在当前工作目录，否则它会保存在默认的临时文件夹中。
 ## 3 爬取天气数据
 选择中央气象台的天气数据，采用rvest包爬取天气数据：
  
  
- 
+``` r
 ## 爬取天气数据
 website <- "http://www.nmc.cn/publish/forecast/china.html"
 web <- read_html(website,encoding = "UTF-8") 
@@ -40,9 +43,10 @@ weather.data <- t(weather.data)
 # 重命名行和列
 weather.data <- as.data.frame(weather.data,row.names=1:nrow(dat0),stringsAsFactors=FALSE)
 colnames(weather.data) <- c("area","weather","temperature")
- 
-4 数据整理
+```
+## 4 数据整理
 继续整理数据，生成衍生变量：weatherc
+``` r
 # 数据整理
 # 获取末尾的40个城市的记录
 weather.data <- tail(weather.data,40)
@@ -70,7 +74,7 @@ weather.data$weatherc[ind2] <- "cloudy"
 weather.data$weatherc[ind3] <- "rainy"
 # 去掉了未能成功赋值的行
 weather.data <- weather.data[-19,]
- 
+```
 整理后的数据如上，最后一列weatherc表示简化后的天气类型，即是sunny、cloudy还是rainy，其中小雨转多云、多云转晴这些天气状况直接就简化为rainy以及cloudy，简化后方便与准备工作3中所表示的三种天气图片相对应。
 具体的代码不做详细分析，中间涉及到正则匹配和替换，如果你不了解正则，去百度搜搜三十分钟学会正则表达式，你就能大致明白。
 我想特别说明的是，作者的这个包里提取经纬度的函数get_city_coord在提取三个字的城市时存在BUG，所以上述代码在最后使用代码dat0[-c(1,6),]时暂时去掉了三个字的城市数据。该部分BUG已经提交给作者，相信很快就会修复。
@@ -79,6 +83,7 @@ weather.data <- weather.data[-19,]
 a.	采用get_city_coord获取城市的经纬度数据
 b.	封装城市的图片以及标签信息
 c.	采用remapB获做城市天气可视化展示
+``` r
 remapB(center = c(104.114129,37.550339),
        zoom = 5,
        color = "Bright",
@@ -89,6 +94,7 @@ remapB(center = c(104.114129,37.550339),
        markLineTheme = markLineControl(),
        markPointTheme = markPointControl(),
        geoData = NA)
+```
 remapB函数相关参数说明：
 •	makePointData：城市相关信息，包括需要展示的天气状况图片以及文字信息
 •	geoData：城市对应的经纬度
@@ -99,7 +105,7 @@ remapB函数相关参数说明：
 •	markLineTheme：标记线的主题
 •	zoom: Bmap的大小缩放zoom:5国家数据 zoom:15 城市的数据
  
- 
+``` r 
 # 天气可视化展示
 # remap.init()
 geoData <- sapply(weather.data$area, get_city_coord)
@@ -137,10 +143,11 @@ remapB(markPointData = newdata,
                                          effectType='bounce',
                                          effect=T,
                                          color = "Random"))
+```
 展示结果如下图，这里只是截了一个屏，而其实这张图是动态的，天气图标会有一个浮动的效果，并且鼠标移动到天气图标上，会有一个文字效果展示具体的天气和温度数据。
  
 
-5 小结
+## 5 小结
 本文实现了全国主要城市天气可视化，这仅是REmap包的一个应用，它还可以用来做著名的百度迁徙图以及城市热力图等等。
 REmap包的官方文档详见：https://github.com/Lchiffon/REmap
 
