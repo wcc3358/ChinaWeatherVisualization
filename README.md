@@ -96,14 +96,14 @@ remapB(center = c(104.114129,37.550339),
        geoData = NA)
 ```
 remapB函数相关参数说明：
-•	makePointData：城市相关信息，包括需要展示的天气状况图片以及文字信息
-•	geoData：城市对应的经纬度
-•	color：地图的主题颜色，有"Bright", "Blue", "light", "dark", "redalert", "googlelite", "grassgreen", "midnight", "pink", "darkgreen", "bluish", "grayscale", "hardedge"可选，示例见下文
-•	subtitle：副标题
-•	makePointTheme：控制显示的图片的大小，显示效果等等
-•	markLineData：标记线的数据
-•	markLineTheme：标记线的主题
-•	zoom: Bmap的大小缩放zoom:5国家数据 zoom:15 城市的数据
+- 	makePointData：城市相关信息，包括需要展示的天气状况图片以及文字信息
+- 	geoData：城市对应的经纬度
+- 	color：地图的主题颜色，有"Bright", "Blue", "light", "dark", "redalert", "googlelite", "grassgreen", "midnight", "pink", "darkgreen", "bluish", "grayscale", "hardedge"可选，示例见下文
+- 	subtitle：副标题
+- 	makePointTheme：控制显示的图片的大小，显示效果等等
+- 	markLineData：标记线的数据
+- 	markLineTheme：标记线的主题
+- 	zoom: Bmap的大小缩放zoom:5国家数据 zoom:15 城市的数据
  
 ``` r 
 # 天气可视化展示
