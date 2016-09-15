@@ -24,8 +24,13 @@ options(remap.js.web=T)
 设置options(remap.js.web=T)后，生成html将保存在当前工作目录，否则它会保存在默认的临时文件夹中。
 ## 3 爬取天气数据
 选择中央气象台的天气数据，采用rvest包爬取天气数据：
+
+![]( pictures/中央气象台.png ) 
  
- 
+![]( pictures/table.png ) 
+
+![]( pictures/HTML.png )
+
 ``` r
 ## 爬取天气数据
 website <- "http://www.nmc.cn/publish/forecast/china.html"
@@ -44,6 +49,9 @@ weather.data <- t(weather.data)
 weather.data <- as.data.frame(weather.data,row.names=1:nrow(dat0),stringsAsFactors=FALSE)
 colnames(weather.data) <- c("area","weather","temperature")
 ```
+
+![]( pictures/showtable01.png ) 
+
 ## 4 数据整理
 继续整理数据，生成衍生变量：weatherc
 ``` r
@@ -75,10 +83,16 @@ weather.data$weatherc[ind3] <- "rainy"
 # 去掉了未能成功赋值的行
 weather.data <- weather.data[-19,]
 ```
+
+![]( pictures/showtable02.png )
+
 整理后的数据如上，最后一列weatherc表示简化后的天气类型，即是sunny、cloudy还是rainy，其中小雨转多云、多云转晴这些天气状况直接就简化为rainy以及cloudy，简化后方便与准备工作3中所表示的三种天气图片相对应。
+
 具体的代码不做详细分析，中间涉及到正则匹配和替换，如果你不了解正则，去百度搜搜三十分钟学会正则表达式，你就能大致明白。
+
 我想特别说明的是，作者的这个包里提取经纬度的函数get_city_coord在提取三个字的城市时存在BUG，所以上述代码在最后使用代码dat0[-c(1,6),]时暂时去掉了三个字的城市数据。该部分BUG已经提交给作者，相信很快就会修复。
-5 可视化展示
+
+## 5 可视化展示
 可视化展示的三个步骤：
 a.	采用get_city_coord获取城市的经纬度数据
 b.	封装城市的图片以及标签信息
@@ -104,7 +118,9 @@ remapB函数相关参数说明：
 - 	markLineData：标记线的数据
 - 	markLineTheme：标记线的主题
 - 	zoom: Bmap的大小缩放zoom:5国家数据 zoom:15 城市的数据
- 
+
+![]( pictures/maptheme01.png )
+
 ``` r 
 # 天气可视化展示
 # remap.init()
@@ -145,7 +161,7 @@ remapB(markPointData = newdata,
                                          color = "Random"))
 ```
 展示结果如下图，这里只是截了一个屏，而其实这张图是动态的，天气图标会有一个浮动的效果，并且鼠标移动到天气图标上，会有一个文字效果展示具体的天气和温度数据。
- 
+![]( pictures/截图.png ) 
 
 ## 5 小结
 本文实现了全国主要城市天气可视化，这仅是REmap包的一个应用，它还可以用来做著名的百度迁徙图以及城市热力图等等。
