@@ -13,7 +13,7 @@ install_github('lchiffon/REmap')
 图片可以自行百度或者设计，或者直接引用我github上的图片。
 图片链接地址https://github.com/wcc3358/ChinaWeatherVisualization
 图片形式大致如下：
- 
+![](pictures/weather.png)
 将天气数据做简化，简化后只有晴天、多云以及阴天三种。
 ## 2 载入REmap包
 ``` r
